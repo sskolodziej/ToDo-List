@@ -1,75 +1,262 @@
-// Zmienne globalne
+// Global variables
+var $inputMain, $btnAdd, $ulListOfTasks, $myNodelist, $liText, $newListElement, $btnSpanEdit, $btnSpanClose, $popupEditContainer, $popupEditBtnClose, $popupEditBtnCancel, $popupEditBtnConfirm, $popupEditInput, $liTextContent;
 
-//const initialList = ['Dzisiaj robię usuwanie', 'Nakarm psa'];
+//const initialList = ["Dzisiaj robię usuwanie", "Nakarm psa"];
 
+// Starting initial functions
 function main() {
-    //odpalenie funkcji początkowych
+    prepareDOMElements();
+    prepareDOMEvents();
+    addListBtns();
+
+    //    prepareInitialList();
 }
 
+// Search for elements in DOM tree
 function prepareDOMElements() {
-    //przygotowanie- wyszukanie elementów w drzewie DOM
+    $inputMain = document.getElementById("inputMain");
+    $btnAdd = document.getElementById("btnAdd");
+
+    $ulListOfTasks = document.getElementById("ulListOfTasks");
+    $myNodelist = document.getElementsByTagName("li");
+    $btnSpanEdit = document.getElementsByClassName("btnSpanEdit");
+    $btnSpanClose = document.getElementsByClassName("btnSpanClose");
+
+    $popupEditContainer = document.getElementById("popupEditContainer");
+    $popupEditBtnClose = document.getElementById("popupEditBtnClose");
+    $popupEditInput = document.getElementById("popupEditInput");
+    $popupEditBtnCancel = document.getElementById("popupEditBtnCancel");
+    $popupEditBtnConfirm = document.getElementById("popupEditBtnConfirm");
 }
 
+// Prepare DOM listeners
 function prepareDOMEvents() {
-    //przygotowanie listenerów
+    $inputMain.addEventListener("keydown", addWithEnter);
+    $btnAdd.addEventListener("click", addButtonClickHandler);
+
+    $ulListOfTasks.addEventListener("click", listClickManager);
+
+    $popupEditBtnClose.addEventListener("click", closePopup);
+    $popupEditBtnCancel.addEventListener("click", closePopup);
+
+    //    $popupEditBtnConfirm.addEventListener("click", acceptChangeHandler(openPopup));
+    //    $popupEditInput.addEventListener("keydown", editWithEnter);
 }
 
-function prepareInitialList() {
-    //wrzucenie poczatkowych elementów do listy
+function addWithEnter(enter) {
+    if (enter.keyCode == 13) {
+        addButtonClickHandler();
+    }
 }
 
+// Obługa kliknięcia przycisku "Add"
 function addButtonClickHandler() {
-    //obługa kliknięcia przycisku dodaj
+    createElement();
 }
 
+// Tworzyc reprezentacje DOM elementu return newElement
+function createElement(e /* Title, author, id */ ) {
+    $newListElement = document.createElement("LI");
+    // z jakiegoś powodu nie mogłam zmiennej $inputMain przygotować w prepareDOMElements(), gdyż wyskakiwał błąd
+    $inputMain = document.getElementById("inputMain").value;
+    $liText = document.createTextNode($inputMain);
+
+    addNewElementToList();
+}
+
+// Obsługa dodawanie elementów do listy
+// $list.appendChild(createElement("nowy", 2))
 function addNewElementToList( /* Title, author, id */ ) {
-    //obsługa dodawanie elementów do listy
-    // $list.appendChild(createElement('nowy', 2))
+    $newListElement.appendChild($liText);
+
+    ifTextValueEmpty();
+    addListBtns();
 }
 
-function createElement( /* Title, author, id */ ) {
-    // Tworzyc reprezentacje DOM elementu return newElement
+function ifTextValueEmpty() {
+    if ($inputMain === "") {
+        alert("Enter a title of a task to do!");
+    } else {
+        $ulListOfTasks.appendChild($newListElement);
+    }
+    document.getElementById("inputMain").value = "";
 }
 
-function listClickManager( /* event- event.target */ ) {
-    // Rozstrzygnięcie co dokładnie zostało kliknięte i wywołanie odpowiedniej funkcji
-    // event.target.parentElement.id
-    // if(event.target.className === 'edit') { editListElement(id) }
+// Rozstrzygnięcie co dokładnie zostało kliknięte i wywołanie odpowiedniej funkcji
+// event.target.parentElement.id
+// if(event.target.className === "btnSpanEdit") { editListElement(id) }
+function listClickManager(e /* event- event.target */ ) {
+    markElementAsDone(event);
+    clickEditBtn();
+    removeListElement();
 }
 
+// Mark as done a task on list (CSS class changed)
+function markElementAsDone(event /* id */ ) {
+    if (event.target.tagName === "LI") {
+        event.target.classList.toggle("checkedTask");
+    }
+    false;
+}
+
+// Create a "btnSpanEdit" button and append it to each list item
+function createEditBtn() {
+    for (var i = 0; i < $myNodelist.length; i++) {
+        if ($myNodelist[i].innerHTML.includes("btnSpanEdit nodeBtns")) {} else {
+            var $span = document.createElement("SPAN");
+            var $txt = document.createTextNode("edit");
+            $span.className = "btnSpanEdit nodeBtns";
+            $span.appendChild($txt);
+            $myNodelist[i].appendChild($span);
+        }
+    }
+}
+
+// Create a "btnSpanClose" button and append it to each list item
+function createRemoveBtn() {
+    for (var i = 0; i < $myNodelist.length; i++) {
+        if ($myNodelist[i].innerHTML.includes("btnSpanClose nodeBtns")) {} else {
+            var $span = document.createElement("SPAN");
+            var $txt = document.createTextNode("\u00D7");
+            $span.className = "btnSpanClose nodeBtns";
+            $span.appendChild($txt);
+            $myNodelist[i].appendChild($span);
+        }
+    }
+}
+
+// Manage creating "btnSpanEdit" and "btnSpanClose" buttons
+function addListBtns() {
+    createEditBtn();
+    createRemoveBtn();
+}
+
+// After clicking a "btnSpanClose" button, remove a task element from the list
 function removeListElement( /* id */ ) {
-    // Usuwanie elementu z listy
+    var $btnSpanClose = document.getElementsByClassName("btnSpanClose");
+    for (var i = 0; i < $btnSpanClose.length; i++) {
+        $btnSpanClose[i].onclick = function () {
+            var $parentElement = this.parentElement;
+            $parentElement.style.display = "none";
+        }
+    }
 }
 
-function editListElement( /* id */ ) {
-    // Pobranie informacji na temat zadania
-    // Umieść dane w popupie
-}
-
-function addDataToPopup( /* Title, author, id */ ) {
-    // umieść informacje w odpowiednim miejscu w popupie
-}
-
-function acceptChangeHandler() {
-    // pobierz dane na temat zadania z popupu (id, nowyTitle, nowyColor ...)
-    // Następnie zmodyfikuj element listy wrzucając w niego nowyTitle, nowyColor...
-    // closePopup()
+// Click on a "btnSpanEdit" button to hide the current list item
+function clickEditBtn() {
+    openPopup();
 }
 
 function openPopup() {
-    // Otwórz popup
+    for (var i = 0; i < $btnSpanEdit.length; i++) {
+        $btnSpanEdit[i].onclick = function () {
+            $liTextContent = this.parentElement.textContent;
+
+            editListElement($liTextContent);
+
+            $popupEditContainer.style.display = "flex";
+
+            popupEditInputSelect();
+
+            //            debugger;
+
+            // mam problem z użycia zewnętrznie funkcji dla przycisku "confirm"
+            // tu powinna być funkcja acceptChangeHandler() ale tam "this" jest buttonem i musze się zastanowić jak mieć dostęp do właściwego elementu listy
+            if ($popupEditBtnConfirm.onclick = () => {
+                    // funkcja ifTextValueEmpty2 do poprawy gdyż nie działa poprawnie
+                    ifTextValueEmpty2();
+                    this.parentElement.textContent = $popupEditInput.value;
+
+                    closePopup();
+                    addListBtns();
+                });
+            else {}
+        }
+    }
+}
+
+// Text in popup is automatically selected
+function popupEditInputSelect() {
+    $popupEditInput.focus();
+    $popupEditInput.select();
+}
+
+// Pobranie informacji na temat zadania
+// Umieść dane w popupie
+function editListElement(dataToEdit /* id */ ) {
+    var $fullLiValue = dataToEdit;
+    var $getLiValue = $fullLiValue.replace(/edit×/g, "");
+
+    addDataToPopup($getLiValue);
+}
+
+// Umieść informacje w odpowiednim miejscu w popupie
+function addDataToPopup(dataToAdd /* Title, author, id */ ) {
+    $popupEditInput.value = dataToAdd;
 }
 
 function closePopup() {
-    // Zamknij popup
+    $popupEditContainer.style.display = "none";
 }
 
-function declineChanges() { //niepotrzebna raczej
-    // closePopup()
+
+
+
+
+
+// Funkcja prepareInitialList() do późniejszego zrobienia
+//
+//function prepareInitialList() {
+//    //wrzucenie poczatkowych elementów do listy
+//}
+
+
+
+
+// ===========================================================
+
+// PONIŻEJ FUNKCJE DO POPRAWY! proszę o komentarz
+
+// Funkcja ifTextValueEmpty2 do poprawy gdyż nie działa poprawnie
+function ifTextValueEmpty2() {
+    if ($popupEditInput.value === "") {
+        alert("Enter a title of a task to do!");
+    } else {}
 }
 
-function markElementAsDone( /* id */ ) {
-    //zaznacz element jako wykonany (podmień klasę CSS)
-}
 
-document.addEventListener('DOMContentLoaded', main);
+
+
+// mam problem z użycia zewnętrznie funkcji dla przycisku "confirm"
+// dla funkcji acceptChangeHandler() potrzebuję mieć dostęp do właściwego elementu listy ale w niej "this" jest buttonem i muszę się zastanowić jak to rozwiązać
+//
+//function acceptChangeHandler($liTextContent) {
+//    // pobierz dane na temat zadania z popupu (id, nowyTitle, nowyColor ...)
+//    // Następnie zmodyfikuj element listy wrzucając w niego nowyTitle, nowyColor...
+//    // closePopup()
+//
+//    debugger;
+//
+//    ifTextValueEmpty2();
+//    //    this.parentElement.textContent = $popupEditInput.value;
+//    this.parentElement.textContent = $popupEditInput.value;
+//    closePopup();
+//    addListBtns();
+//
+//}
+
+
+
+
+
+// Zaakceptowanie zmian w popupie za pomocą entera - do zrobienia, bo nie działa poprawnie
+//
+//function editWithEnter(enter) {
+//    if (enter.keyCode == 13) {
+//        this.parentElement.textContent = $popupEditInput.value;
+//        closePopup();
+//        addListBtns();
+//    }
+//}
+
+document.addEventListener("DOMContentLoaded", main);

@@ -15,20 +15,42 @@
 </head>
 
 <body>
-    <div id="addForm" class="header">
+    <div id="pageHeader">
         <h1>To Do List</h1>
-        <input type="text" id="myInput" placeholder="Insert a title of a task">
-        <button id="addTodo" class="addBtn">Add</button>
+        <input type="text" id="inputMain" placeholder="Insert a title of a task to do" maxlength="50">
+        <button id="btnAdd" class="btnAdd">Add</button>
     </div>
 
-    <ul id="listOfTasks">
-        <li class="checked">Create a repo on GitHub</li>
-        <li class="checked">Create initial files: HTML, CSS, and JS</li>
+    <ul id="ulListOfTasks">
+        <li class="checkedTask">Create a repo on GitHub</li>
+        <li class="checkedTask">Create initial files: HTML, CSS, and JS</li>
         <li>Add ...</li>
         <li>... more ...</li>
         <li>... tasks ...</li>
         <li>... to do!!!</li>
-        <li class="checked">Finished task</li>
+        <li class="checkedTask">Finished task</li>
     </ul>
+
+    <div id="popupEditContainer">
+        <div id="divPopup">
+
+            <div id="divPopupEditBtnClose">
+                <button id="popupEditBtnClose">×</button>
+            </div>
+
+            <h2>Change the name of the following task:</h2>
+
+            <input type="text" id="popupEditInput" placeholder="Insert a title of a task to do" maxlength="50">
+
+            <div class="popupEditBtns">
+                <button id="popupEditBtnCancel" class="btnAdd">Cancel</button>
+                <button id="popupEditBtnConfirm" class="btnAdd">Confirm</button>
+            </div>
+
+        </div>
+    </div>
+
     <script src="scripts/script.js"></script>
-</body></html>
+</body>
+
+</html>
