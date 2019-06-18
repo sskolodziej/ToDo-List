@@ -9,42 +9,36 @@
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/style.css">
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&amp;subset=latin-ext" rel="stylesheet">
 
     <title>To Do List</title>
 </head>
 
 <body>
-    <div id="pageHeader">
+    <div id="page-header">
         <h1>To Do List</h1>
-        <input type="text" id="inputMain" placeholder="Insert a title of a task to do" maxlength="50">
-        <button id="btnAdd" class="btnAdd">Add</button>
+        <input type="text" id="input-main" placeholder="Insert a title of a task to do" maxlength="50">
+        <button id="btn-add" class="btn-add">Add</button>
     </div>
 
-    <ul id="ulListOfTasks">
-        <li class="checkedTask">Create a repo on GitHub</li>
-        <li class="checkedTask">Create initial files: HTML, CSS, and JS</li>
-        <li>Add ...</li>
-        <li>... more ...</li>
-        <li>... tasks ...</li>
-        <li>... to do!!!</li>
-        <li class="checkedTask">Finished task</li>
-    </ul>
+    <ul id="ul-list-of-tasks"></ul>
 
-    <div id="popupEditContainer">
-        <div id="divPopup">
+    <div id="popup-edit-container">
+        <div id="popup-div">
 
-            <div id="divPopupEditBtnClose">
-                <button id="popupEditBtnClose">×</button>
+            <div id="popup-div-edit-btn-close">
+                <button id="popup-edit-btn-close">×</button>
             </div>
 
             <h2>Change the name of the following task:</h2>
 
-            <input type="text" id="popupEditInput" placeholder="Insert a title of a task to do" maxlength="50">
+            <input type="text" id="popup-edit-input" placeholder="Insert a title of a task to do" maxlength="50">
 
-            <div class="popupEditBtns">
-                <button id="popupEditBtnCancel" class="btnAdd">Cancel</button>
-                <button id="popupEditBtnConfirm" class="btnAdd">Confirm</button>
+            <div class="popup-edit-btns">
+                <button id="popup-edit-btn-cancel" class="btn-add">Cancel</button>
+                <button id="popup-edit-btn-confirm" class="btn-add">Confirm</button>
             </div>
 
         </div>
