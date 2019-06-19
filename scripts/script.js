@@ -1,5 +1,5 @@
 // Global variables
-var $btnAdd, $ulListOfTasks, $myNodelist, $btnSpanClose, $popupEditContainer, $popupEditBtnClose, $popupEditBtnCancel, $popupEditBtnConfirm;
+var $btnAdd, $ulListOfTasks, $btnSpanClose, $popupEditContainer, $popupEditBtnClose, $popupEditBtnCancel, $popupEditBtnConfirm;
 
 // Starting initial functions
 function main() {
@@ -13,7 +13,6 @@ function prepareDOMElements() {
     $btnAdd = document.getElementById("btn-add");
 
     $ulListOfTasks = document.getElementById("ul-list-of-tasks");
-    $myNodelist = document.getElementsByTagName("li");
 
     $btnSpanClose = document.getElementsByClassName("btn-span-close");
 
@@ -42,13 +41,11 @@ async function prepareInitialList() {
     })
 }
 
-// Obługa kliknięcia przycisku "Add"
+// What happens after clicking the "Add" button
 function addButtonClickHandler() {
     var $inputMain = document.getElementById("input-main").value;
     var $liText = document.createTextNode($inputMain);
     var $author = "sk";
-
-    addNewElementToList($inputMain);
 
     if ($inputMain === "") {
         alert("Enter a title of a task to do!");
@@ -57,21 +54,33 @@ function addButtonClickHandler() {
     }
 }
 
-// Obsługa dodawanie elementów do listy
-// $list.appendChild(createElement("nowy", 2))
+// $list.appendChild(createElement("new", 2))
 function addNewElementToList(title, id, author /* Title, author, id */ ) {
     var $newElement = createElement(title, id, author);
 
     if (title === "") {} else {
         $ulListOfTasks.appendChild($newElement);
-        addListBtns(id);
+
+        // Create a "btn-span-edit" button and append it to each list item
+        var $spanEdit = document.createElement("SPAN");
+        var $txtEdit = document.createTextNode("edit");
+        $spanEdit.id = id;
+        $spanEdit.className = "btn-span-edit node-btns";
+        $spanEdit.appendChild($txtEdit);
+        $newElement.appendChild($spanEdit);
+
+        // Create a "btn-span-close" button and append it to each list item
+        var $spanRemove = document.createElement("SPAN");
+        var $txtRemove = document.createTextNode("\u00D7");
+        $spanRemove.id = id;
+        $spanRemove.className = "btn-span-close node-btns";
+        $spanRemove.appendChild($txtRemove);
+        $newElement.appendChild($spanRemove);
     }
     document.getElementById("input-main").value = "";
-
-    //    removeElement(id);
 }
 
-// Tworzyc reprezentacje DOM elementu return newElement
+// Create a DOM representation of an element and return newElement
 function createElement(title, id /* Title, author, id */ ) {
     var $newLiElement = document.createElement("LI");
     $newLiElement.innerText = title;
@@ -90,13 +99,13 @@ function addElementToServer(title, author) {
         });
 }
 
-// Delete the content on a local list and get data from a server
+// Delete the whole content on a local list and get new data from a server
 function refreshTheList() {
     $ulListOfTasks.innerHTML = "";
     prepareInitialList();
 }
 
-// Rozstrzygnięcie co dokładnie zostało kliknięte i wywołanie odpowiedniej funkcji
+// Decide what was clicked and call a proper function
 // event.target.parentElement.id
 // if(event.target.className === "btn-span-edit") { editListElement(id) }
 function listClickManager(ev /* event- event.target */ ) {
@@ -105,7 +114,7 @@ function listClickManager(ev /* event- event.target */ ) {
     clickEditBtn(ev, ev.target.id);
 }
 
-// Click on a "btn-span-edit" button to hide the current list item
+// Click a "btn-span-edit" button to hide the current list item
 function clickEditBtn(ev, id) {
     if (ev.target.className === "btn-span-edit node-btns") {
         editListElement(id);
@@ -124,42 +133,8 @@ function removeElement(ev, id /* id */ ) {
     false;
 }
 
-// Manage creating "btn-span-edit" and "btn-span-close" buttons
-function addListBtns(id) {
-    createEditBtn(id);
-    createRemoveBtn(id);
-}
-
-// Create a "btn-span-edit" button and append it to each list item
-function createEditBtn(id) {
-    for (var i = 0; i < $myNodelist.length; i++) {
-        if ($myNodelist[i].innerHTML.includes("btn-span-edit node-btns")) {} else {
-            var $span = document.createElement("SPAN");
-            var $txt = document.createTextNode("edit");
-            $span.id = id;
-            $span.className = "btn-span-edit node-btns";
-            $span.appendChild($txt);
-            $myNodelist[i].appendChild($span);
-        }
-    }
-}
-
-// Create a "btn-span-close" button and append it to each list item
-function createRemoveBtn(id) {
-    for (var i = 0; i < $myNodelist.length; i++) {
-        if ($myNodelist[i].innerHTML.includes("btn-span-close node-btns")) {} else {
-            var $span = document.createElement("SPAN");
-            var $txt = document.createTextNode("\u00D7");
-            $span.id = id;
-            $span.className = "btn-span-close node-btns";
-            $span.appendChild($txt);
-            $myNodelist[i].appendChild($span);
-        }
-    }
-}
-
-// Pobranie informacji na temat zadania
-// Umieść dane w popupie
+// Get information about a task 
+// Place the data in a popup
 function editListElement(id /* id */ ) {
     fetch("http://195.181.210.249:3000/todo/" + id, {
             method: "GET",
@@ -176,7 +151,7 @@ function editListElement(id /* id */ ) {
         })
 }
 
-// Umieść informacje w odpowiednim miejscu w popupie
+// Put information in a correct place in a popup
 function addDataToPopup(title, author, id /* Title, author, id */ ) {
     $popupEditInput.value = title;
     $popupEditInput.author = author;
@@ -185,8 +160,8 @@ function addDataToPopup(title, author, id /* Title, author, id */ ) {
     openPopup();
 }
 
-// pobierz dane na temat zadania z popupu (id, nowyTitle, nowyColor ...)
-// Następnie zmodyfikuj element listy wrzucając w niego nowyTitle, nowyColor...
+// Get data of a task from a popup (id, newTitle, newColour, etc...)
+// Then, modify an element of a list by giving it the data (newTitle, newColour, etc...)
 function acceptChangeHandler() {
     var $inputEditTitle = this.parentElement.parentElement.childNodes[5].value;
 
