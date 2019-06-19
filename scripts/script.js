@@ -58,25 +58,24 @@ function addButtonClickHandler() {
 function addNewElementToList(title, id, author /* Title, author, id */ ) {
     var $newElement = createElement(title, id, author);
 
-    if (title === "") {} else {
-        $ulListOfTasks.appendChild($newElement);
+    $ulListOfTasks.appendChild($newElement);
 
-        // Create a "btn-span-edit" button and append it to each list item
-        var $spanEdit = document.createElement("SPAN");
-        var $txtEdit = document.createTextNode("edit");
-        $spanEdit.id = id;
-        $spanEdit.className = "btn-span-edit node-btns";
-        $spanEdit.appendChild($txtEdit);
-        $newElement.appendChild($spanEdit);
+    // Create a "btn-span-edit" button and append it to each list item
+    var $spanEdit = document.createElement("SPAN");
+    var $txtEdit = document.createTextNode("edit");
+    $spanEdit.id = id;
+    $spanEdit.className = "btn-span-edit node-btns";
+    $spanEdit.appendChild($txtEdit);
+    $newElement.appendChild($spanEdit);
 
-        // Create a "btn-span-close" button and append it to each list item
-        var $spanRemove = document.createElement("SPAN");
-        var $txtRemove = document.createTextNode("\u00D7");
-        $spanRemove.id = id;
-        $spanRemove.className = "btn-span-close node-btns";
-        $spanRemove.appendChild($txtRemove);
-        $newElement.appendChild($spanRemove);
-    }
+    // Create a "btn-span-close" button and append it to each list item
+    var $spanRemove = document.createElement("SPAN");
+    var $txtRemove = document.createTextNode("\u00D7");
+    $spanRemove.id = id;
+    $spanRemove.className = "btn-span-close node-btns";
+    $spanRemove.appendChild($txtRemove);
+    $newElement.appendChild($spanRemove);
+
     document.getElementById("input-main").value = "";
 }
 
@@ -119,7 +118,6 @@ function clickEditBtn(ev, id) {
     if (ev.target.className === "btn-span-edit node-btns") {
         editListElement(id);
     }
-    false;
 }
 
 // After clicking a "btn-span-close" button, remove a task element from the list
@@ -130,7 +128,6 @@ function removeElement(ev, id /* id */ ) {
                 refreshTheList();
             });
     }
-    false;
 }
 
 // Get information about a task 
@@ -199,7 +196,6 @@ function markElementAsDone(id /* id */ ) {
     if (id.target.tagName === "LI") {
         id.target.classList.toggle("li-checked");
     }
-    false;
 }
 
 document.addEventListener("DOMContentLoaded", main);
