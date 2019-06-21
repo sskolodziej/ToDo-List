@@ -60,22 +60,6 @@ function addNewElementToList(title, id, author /* Title, author, id */ ) {
 
     $ulListOfTasks.appendChild($newElement);
 
-    // Create a "btn-span-edit" button and append it to each list item
-    var $spanEdit = document.createElement("SPAN");
-    var $txtEdit = document.createTextNode("edit");
-    $spanEdit.id = id;
-    $spanEdit.className = "btn-span-edit node-btns";
-    $spanEdit.appendChild($txtEdit);
-    $newElement.appendChild($spanEdit);
-
-    // Create a "btn-span-close" button and append it to each list item
-    var $spanRemove = document.createElement("SPAN");
-    var $txtRemove = document.createTextNode("\u00D7");
-    $spanRemove.id = id;
-    $spanRemove.className = "btn-span-close node-btns";
-    $spanRemove.appendChild($txtRemove);
-    $newElement.appendChild($spanRemove);
-
     document.getElementById("input-main").value = "";
 }
 
@@ -84,6 +68,22 @@ function createElement(title, id /* Title, author, id */ ) {
     var $newLiElement = document.createElement("LI");
     $newLiElement.innerText = title;
     $newLiElement.id = id;
+
+    // Create a "btn-span-edit" button and append it to each list item
+    var $spanEdit = document.createElement("SPAN");
+    var $txtEdit = document.createTextNode("edit");
+    $spanEdit.id = id;
+    $spanEdit.className = "btn-span-edit node-btns";
+    $spanEdit.appendChild($txtEdit);
+    $newLiElement.appendChild($spanEdit);
+
+    // Create a "btn-span-close" button and append it to each list item
+    var $spanRemove = document.createElement("SPAN");
+    var $txtRemove = document.createTextNode("\u00D7");
+    $spanRemove.id = id;
+    $spanRemove.className = "btn-span-close node-btns";
+    $spanRemove.appendChild($txtRemove);
+    $newLiElement.appendChild($spanRemove);
 
     return $newLiElement;
 }
